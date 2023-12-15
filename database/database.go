@@ -1,7 +1,9 @@
-package app
+package database
 
 import (
 	"fmt"
+	"gofiber-restapi/config"
+	"gofiber-restapi/internals/model"
 	"log"
 	"os"
 
@@ -11,11 +13,11 @@ import (
 )
 
 func OpenConnection() *gorm.DB {
-	port := Config("DB_PORT")
-	host := Config("DB_HOST")
-	user := Config("DB_USER")
-	password := Config("DB_PASSWORD")
-	dbname := Config("DB_NAME")
+	port := config.Config("DB_PORT")
+	host := config.Config("DB_HOST")
+	user := config.Config("DB_USER")
+	password := config.Config("DB_PASSWORD")
+	dbname := config.Config("DB_NAME")
 
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", user, password, host, port, dbname) // every database has its own dsn
 	dialect := mysql.Open(dsn)
@@ -27,6 +29,10 @@ func OpenConnection() *gorm.DB {
 
 		os.Exit(1)
 	}
+
+	log.Println("Connected to database!")
+	log.Println("Running migrations...")
+	db.AutoMigrate(&model.User{}, &model.Thread{})
 
 	return db
 }
