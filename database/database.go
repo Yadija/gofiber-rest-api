@@ -12,7 +12,15 @@ import (
 	"gorm.io/gorm/logger"
 )
 
-func OpenConnection() *gorm.DB {
+// database instance
+type DbInstance struct {
+	Db *gorm.DB
+}
+
+// declare global variable
+var DB DbInstance
+
+func OpenConnection() {
 	port := config.Config("DB_PORT")
 	host := config.Config("DB_HOST")
 	user := config.Config("DB_USER")
@@ -33,6 +41,9 @@ func OpenConnection() *gorm.DB {
 	log.Println("Connected to database!")
 	log.Println("Running migrations...")
 	db.AutoMigrate(&model.User{}, &model.Thread{})
+	log.Println("Database migrations complete!")
 
-	return db
+	DB = DbInstance{
+		Db: db,
+	}
 }
