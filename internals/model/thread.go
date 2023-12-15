@@ -9,7 +9,7 @@ import (
 
 type Thread struct {
 	ID        uuid.UUID `gorm:"column:id;type:varchar(200);primary_key" json:"id"`
-	Content   string    `gorm:"column:content;type:varchar(200);not null" json:"content"`
+	Content   string    `gorm:"column:content;type:varchar(200);not null" json:"content" validate:"required,max=200"`
 	Owner     string    `gorm:"column:owner;type:text;not null" json:"owner"`
 	CreatedAt time.Time `gorm:"column:created_at;autoCreateTime" json:"createdAt"`
 	UpdatedAt time.Time `gorm:"column:updated_at;autoCreateTime;autoUpdateTime" json:"updatedAt"`
