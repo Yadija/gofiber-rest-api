@@ -19,6 +19,7 @@ func CreateUser(ctx *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusInternalServerError, "Reveiw your input")
 	}
 
+	// validate
 	err := validate.Struct(user)
 	if exception, ok := err.(validator.ValidationErrors); ok {
 		return fiber.NewError(fiber.StatusInternalServerError, exception.Error())
@@ -39,9 +40,9 @@ func CreateUser(ctx *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusInternalServerError, "Couldn't create user")
 	}
 
-	return ctx.JSON(fiber.Map{
-		"status":  fiber.StatusOK,
-		"message": "success",
+	return ctx.Status(fiber.StatusCreated).JSON(fiber.Map{
+		"status":  "success",
+		"message": "User created successfully",
 		"data": map[string]interface{}{
 			"username": user.Username,
 			"fullname": user.Fullname,
@@ -58,10 +59,10 @@ func GetUserByUsername(ctx *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusNotFound, "User not found")
 	}
 
-	return ctx.JSON(fiber.Map{
-		"status":  fiber.StatusOK,
-		"message": "success",
-		"data":    map[string]interface{}{
+	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{
+		"status":  "success",
+		"message": "User found",
+		"data": map[string]interface{}{
 			"username": user.Username,
 			"fullname": user.Fullname,
 		},
