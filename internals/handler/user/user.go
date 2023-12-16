@@ -48,3 +48,22 @@ func CreateUser(ctx *fiber.Ctx) error {
 		},
 	})
 }
+
+func GetUserByUsername(ctx *fiber.Ctx) error {
+	db := database.DB.Db
+	username := ctx.Params("username")
+
+	var user model.User
+	if err := db.Where("username = ?", username).First(&user).Error; err != nil {
+		return fiber.NewError(fiber.StatusNotFound, "User not found")
+	}
+
+	return ctx.JSON(fiber.Map{
+		"status":  fiber.StatusOK,
+		"message": "success",
+		"data":    map[string]interface{}{
+			"username": user.Username,
+			"fullname": user.Fullname,
+		},
+	})
+}

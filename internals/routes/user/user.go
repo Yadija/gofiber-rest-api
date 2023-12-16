@@ -9,4 +9,5 @@ import (
 func SetupRoutes(router fiber.Router) {
 	users := router.Group("/users")
 	users.Post("/", userhandler.CreateUser)
+	users.Get("/:username", userhandler.GetUserByUsername)
 }
