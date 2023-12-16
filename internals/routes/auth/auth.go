@@ -9,8 +9,10 @@ import (
 
 func SetupRoutes(router fiber.Router) {
 	refreshJWT := middleware.NewAuthMiddleware("REFRESH_TOKEN_KEY")
+	accessJWT := middleware.NewAuthMiddleware("ACCESS_TOKEN_KEY")
 
 	auth := router.Group("/auth")
 	auth.Post("/", authhandler.Login)
 	auth.Put("/", refreshJWT, authhandler.RefreshToken)
+	auth.Delete("/", accessJWT, authhandler.Logout)
 }

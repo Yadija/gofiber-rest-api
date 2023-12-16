@@ -101,3 +101,28 @@ func RefreshToken(ctx *fiber.Ctx) error {
 		},
 	})
 }
+
+func Logout(ctx *fiber.Ctx) error {
+	db := database.DB.Db
+	user := new(model.User)
+
+	// get data from token
+	claims := ctx.Locals("user").(*jtoken.Token).Claims.(jtoken.MapClaims)
+
+	// find user
+	if err := db.Model(&user).Where("username = ?", claims["username"]).First(&user).Error; err != nil {
+		return fiber.NewError(fiber.StatusUnauthorized, "Access denied")
+	}
+
+	// delete token
+	if err := db.Model(&user).Update("token", nil).Error; err != nil {
+		return fiber.NewError(fiber.StatusInternalServerError, "Failed to delete refresh token")
+	}
+	
+
+	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{
+		"status":  "success",
+		"message": "Logout success",
+		"data":    nil,
+	})
+}
