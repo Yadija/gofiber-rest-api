@@ -16,26 +16,17 @@ func CreateUser(ctx *fiber.Ctx) error {
 
 	// parse body
 	if err := ctx.BodyParser(user); err != nil {
-		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"status":  fiber.StatusInternalServerError,
-			"message": "Reveiw your input",
-		})
+		return fiber.NewError(fiber.StatusInternalServerError, "Reveiw your input")
 	}
 
 	err := validate.Struct(user)
 	if exception, ok := err.(validator.ValidationErrors); ok {
-		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"status":  fiber.StatusInternalServerError,
-			"message": exception.Error(),
-		})
+		return fiber.NewError(fiber.StatusInternalServerError, exception.Error())
 	}
 
 	// check if username already exist
 	if err := db.Where("username = ?", user.Username).First(&user).Error; err == nil {
-		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"status":  fiber.StatusBadRequest,
-			"message": "Username already exist",
-		})
+		return fiber.NewError(fiber.StatusBadRequest, "Username already exist")
 	}
 
 	// hashing password
@@ -45,10 +36,7 @@ func CreateUser(ctx *fiber.Ctx) error {
 	// create user
 	err = db.Create(&user).Error
 	if err != nil {
-		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"status":  fiber.StatusInternalServerError,
-			"message": "Couldn't create user",
-		})
+		return fiber.NewError(fiber.StatusInternalServerError, "Couldn't create user")
 	}
 
 	return ctx.JSON(fiber.Map{
