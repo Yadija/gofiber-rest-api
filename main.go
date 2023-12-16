@@ -18,8 +18,9 @@ func main() {
 
 			// send custom errors as JSON
 			return ctx.Status(code).JSON(fiber.Map{
-				"status":  code,
+				"status":  "fail",
 				"message": err.Error(),
+				"data":    nil,
 			})
 		},
 	})
