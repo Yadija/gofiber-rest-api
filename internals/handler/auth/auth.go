@@ -25,7 +25,7 @@ func Login(ctx *fiber.Ctx) error {
 	// validate
 	err := validate.Struct(auth)
 	if exception, ok := err.(validator.ValidationErrors); ok {
-		return fiber.NewError(fiber.StatusInternalServerError, exception.Error())
+		return fiber.NewError(fiber.StatusBadRequest, exception.Error())
 	}
 
 	// verify user credentials

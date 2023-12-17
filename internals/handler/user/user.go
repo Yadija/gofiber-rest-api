@@ -14,7 +14,7 @@ func CreateUser(ctx *fiber.Ctx) error {
 	user := new(model.User)
 	validate := validator.New()
 
-	// parse body
+	// parser body
 	if err := ctx.BodyParser(user); err != nil {
 		return fiber.NewError(fiber.StatusInternalServerError, "Reveiw your input")
 	}
@@ -22,7 +22,7 @@ func CreateUser(ctx *fiber.Ctx) error {
 	// validate
 	err := validate.Struct(user)
 	if exception, ok := err.(validator.ValidationErrors); ok {
-		return fiber.NewError(fiber.StatusInternalServerError, exception.Error())
+		return fiber.NewError(fiber.StatusBadRequest, exception.Error())
 	}
 
 	// check if username already exist
