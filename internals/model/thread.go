@@ -13,7 +13,7 @@ type Thread struct {
 	Owner     string    `gorm:"column:owner;type:text;not null" json:"owner"`
 	CreatedAt time.Time `gorm:"column:created_at;autoCreateTime" json:"createdAt"`
 	UpdatedAt time.Time `gorm:"column:updated_at;autoCreateTime;autoUpdateTime" json:"updatedAt"`
-	User      User      `gorm:"foreignKey:owner;references:username"`
+	User      User      `gorm:"foreignKey:owner;references:username" validate:"-"`
 }
 
 func (thread *Thread) TableName() string {
