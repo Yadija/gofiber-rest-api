@@ -56,8 +56,26 @@ func GetAllThreads(ctx *fiber.Ctx) error {
 	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{
 		"status":  "success",
 		"message": "Get all threads success",
-		"data":    map[string]interface{}{
+		"data": map[string]interface{}{
 			"threads": threads,
+		},
+	})
+}
+
+func GetThreadById(ctx *fiber.Ctx) error {
+	db := database.DB.Db
+	var thread model.Thread
+	threadId := ctx.Params("threadId")
+
+	if err := db.Select("id", "content", "owner", "created_at", "updated_at").Where("id = ?", threadId).First(&thread).Error; err != nil {
+		return fiber.NewError(fiber.StatusNotFound, "Thread not found")
+	}
+
+	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{
+		"status":  "success",
+		"message": "Get thread success",
+		"data": map[string]interface{}{
+			"thread": thread,
 		},
 	})
 }
