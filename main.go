@@ -4,6 +4,7 @@ import (
 	"gofiber-restapi/database"
 	"gofiber-restapi/router"
 
+	"github.com/gofiber/contrib/swagger"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -27,6 +28,14 @@ func main() {
 
 	// connection to database
 	database.OpenConnection()
+
+	// swagger
+	app.Use(swagger.New(swagger.Config{
+		BasePath: "/",
+		FilePath: "./apidoc.json",
+		Path:     "/swagger",
+		Title:    "Gofiber swagger",
+	}))
 
 	// setup router
 	router.SetupRoutes(app)
