@@ -16,5 +16,6 @@ func SetupRoutes(app fiber.Router) {
 
 	thread.Use(accessJWT) // set auth middleware
 	thread.Post("/", threadhandler.CreateThread)
-	thread.Put("/:threadId", threadhandler.UpdateThread)  
+	thread.Put("/:threadId", threadhandler.UpdateThread)
+	thread.Delete("/:threadId", threadhandler.DeleteThread)
 }

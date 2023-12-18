@@ -128,3 +128,33 @@ func UpdateThread(ctx *fiber.Ctx) error {
 		},
 	})
 }
+
+func DeleteThread(ctx *fiber.Ctx) error {
+	db := database.DB.Db
+	thread := new(model.Thread)
+	threadId := ctx.Params("threadId")
+
+	// find thread
+	if err := db.Where("id = ?", threadId).First(&thread).Error; err != nil {
+		return fiber.NewError(fiber.StatusNotFound, "Thread not found")
+	}
+
+	// get data from token
+	claims := ctx.Locals("user").(*jtoken.Token).Claims.(jtoken.MapClaims)
+
+	// check owner
+	if thread.Owner != claims["username"].(string) {
+		return fiber.NewError(fiber.StatusForbidden, "You don't have permission to delete this thread")
+	}
+
+	// delete thread
+	if err := db.Delete(&thread).Error; err != nil {
+		return fiber.NewError(fiber.StatusInternalServerError, "Couldn't delete thread")
+	}
+
+	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{
+		"status":  "success",
+		"message": "Delete thread success",
+		"data":    nil,
+	})
+}
