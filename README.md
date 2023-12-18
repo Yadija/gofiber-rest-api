@@ -13,6 +13,7 @@ A simple RESTFul API built with Golang and [Fiber](https://gofiber.io).
     - [Before Starting](#before-starting)
     - [Running the Application](#running-the-application)
     - [Build Application](#build-application)
+    - [API Documentation](#api-documentation)
 
 ## Introduction
 
@@ -74,3 +75,7 @@ Run the following command to build the application:
 ```bash
 go build
 ```
+
+### API Documentation
+
+open `http://localhost:3000/swagger` in your browser to view the API documentation.
