@@ -1,0 +1,71 @@
+### Create new user
+POST http://localhost:3000/users
+Accept: application/json
+Content-Type: application/json
+
+{
+  "username": "johndoe",
+  "password": "secret",
+  "fullname": "John Doe"
+}
+
+### Get user by username
+GET http://localhost:3000/users/johndoe
+Accept: application/json
+Content-Type: application/json
+
+### Login
+POST http://localhost:3000/auth
+Accept: application/json
+Content-Type: application/json
+
+{
+  "username": "johndoe",
+  "password": "secret"
+}
+
+### Refresh Token
+PUT http://localhost:3000/auth
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer <refresh token>
+### Logout
+DELETE http://localhost:3000/auth
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer <access token>
+### Create Thread
+POST http://localhost:3000/threads
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer <access token>
+
+{
+  "content": "Hello, World!"
+}
+
+### Get All Threads
+GET http://localhost:3000/threads
+Accept: application/json
+Content-Type: application/json
+
+### Get Thread By Id
+GET http://localhost:3000/threads/9c1d1644-e2e2-4313-9105-189e7ca3bd63
+Accept: application/json
+Content-Type: application/json
+
+### Update Thread
+PUT http://localhost:3000/threads/9c1d1644-e2e2-4313-9105-189e7ca3bd63
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer <access token>
+
+{
+  "content": "Hello, World!"
+}
+
+### Delete Thread
+DELETE http://localhost:3000/threads/fb063f7b-98c2-4386-98a7-10287e032058
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer<access token> 
